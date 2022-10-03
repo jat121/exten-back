@@ -11,13 +11,13 @@ export class SearchService implements OnModuleInit {
 
     constructor(public repo: BufferRepo) { }
     currentProviders: string[] = [];
-    curData: TorrentSearchApi.Torrent[] | any[] = [];
+    curData: any[] = [];
     Buffer;
     limit: number = 5;
     onModuleInit() {
         TorrentSearchApi.enablePublicProviders();
         TorrentSearchApi.disableProvider("TorrentProject")
-        this.currentProviders = TorrentSearchApi.getActiveProviders().map((provider: TorrentSearchApi.TorrentProvider) => {
+        this.currentProviders = TorrentSearchApi.getActiveProviders().map((provider: any) => {
             return provider.name;
         })
         console.log(this.currentProviders);
@@ -27,7 +27,7 @@ export class SearchService implements OnModuleInit {
     search = async (query: string, page: number) => {
         const start = (page === 1 || page === undefined) ? 0 : page * this.limit;
         const limit = start + 5;
-        let finalSearchResults: TorrentSearchApi.Torrent[] | any[] = [];
+        let finalSearchResults:  any[] = [];
         const searchPromises: Promise<any[]>[] = this.currentProviders.map(async (name: string) => {
             try {
                 return await TorrentSearchApi.search([name], query, 'All', limit);
@@ -37,17 +37,17 @@ export class SearchService implements OnModuleInit {
         })
 
         const searchResults = (await Promise.all(searchPromises))
-            .filter((torrent: TorrentSearchApi.Torrent[] | any[]) => {
+            .filter((torrent:any[]) => {
                 return torrent.length > 0;
             })
-            .forEach((torrent: TorrentSearchApi.Torrent[] | any[]) => {
+            .forEach((torrent: any[]) => {
                 finalSearchResults = [...finalSearchResults, ...torrent];
             })
 
-        finalSearchResults = finalSearchResults.map((torrent: TorrentSearchApi.Torrent | any) => {
+        finalSearchResults = finalSearchResults.map((torrent:any) => {
             torrent = { id: generateId(), ...torrent }
             return torrent;
-        }).filter((torrent: TorrentSearchApi.Torrent | any) => {
+        }).filter((torrent:any) => {
             let title = torrent.title.toLowerCase();
             let q = query.toLowerCase();
             return this.find(title, q);
