@@ -6,6 +6,7 @@ import { SearchController } from './search/search.controller';
 import { SearchModule } from './search/search.module';
 
 @Module({
+  imports:[SearchModule],
   controllers: [AppController],
   providers: [AppService],
 })
