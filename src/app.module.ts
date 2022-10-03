@@ -6,8 +6,6 @@ import { SearchController } from './search/search.controller';
 import { SearchModule } from './search/search.module';
 
 @Module({
-  imports: [SearchModule,
-    MongooseModule.forRoot('mongodb://localhost/buffer')],
   controllers: [AppController],
   providers: [AppService],
 })

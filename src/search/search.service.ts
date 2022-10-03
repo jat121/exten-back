@@ -3,13 +3,11 @@ import * as TorrentSearchApi from "torrent-search-api";
 import { v4 as generateId } from 'uuid';
 import * as WebTorrent from 'webtorrent';
 import { threadId } from 'worker_threads';
-import { BufferRepo } from './buffer.repo';
 
 
 @Injectable()
 export class SearchService implements OnModuleInit {
 
-    constructor(public repo: BufferRepo) { }
     currentProviders: string[] = [];
     curData: any[] = [];
     Buffer;
