@@ -11,7 +11,7 @@ export class SearchService implements OnModuleInit {
 
     constructor(public repo: BufferRepo) { }
     currentProviders: string[] = [];
-    curData: TorrentSearchApi.Torrent[] = [];
+    curData: TorrentSearchApi.Torrent[] | any[] = [];
     Buffer;
     limit: number = 5;
     onModuleInit() {
@@ -27,8 +27,8 @@ export class SearchService implements OnModuleInit {
     search = async (query: string, page: number) => {
         const start = (page === 1 || page === undefined) ? 0 : page * this.limit;
         const limit = start + 5;
-        let finalSearchResults: TorrentSearchApi.Torrent[] = [];
-        const searchPromises = this.currentProviders.map(async (name: string) => {
+        let finalSearchResults: TorrentSearchApi.Torrent[] | any[] = [];
+        const searchPromises: Promise<any[]>[] = this.currentProviders.map(async (name: string) => {
             try {
                 return await TorrentSearchApi.search([name], query, 'All', limit);
             } catch (error) {
@@ -37,17 +37,17 @@ export class SearchService implements OnModuleInit {
         })
 
         const searchResults = (await Promise.all(searchPromises))
-            .filter((torrent: TorrentSearchApi.Torrent[]) => {
+            .filter((torrent: TorrentSearchApi.Torrent[] | any[]) => {
                 return torrent.length > 0;
             })
-            .forEach((torrent: TorrentSearchApi.Torrent[]) => {
+            .forEach((torrent: TorrentSearchApi.Torrent[] | any[]) => {
                 finalSearchResults = [...finalSearchResults, ...torrent];
             })
 
-        finalSearchResults = finalSearchResults.map((torrent: TorrentSearchApi.Torrent) => {
+        finalSearchResults = finalSearchResults.map((torrent: TorrentSearchApi.Torrent | any) => {
             torrent = { id: generateId(), ...torrent }
             return torrent;
-        }).filter((torrent: TorrentSearchApi.Torrent) => {
+        }).filter((torrent: TorrentSearchApi.Torrent | any) => {
             let title = torrent.title.toLowerCase();
             let q = query.toLowerCase();
             return this.find(title, q);
