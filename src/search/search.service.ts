@@ -28,7 +28,7 @@ export class SearchService implements OnModuleInit {
         let finalSearchResults:  any[] = [];
         const searchPromises: Promise<any[]>[] = this.currentProviders.map(async (name: string) => {
             try {
-                return await TorrentSearchApi.search([name], query, 'All', limit);
+                return await TorrentSearchApi.search([name], query, 'All', limit * 50);
             } catch (error) {
                 return [];
             }
