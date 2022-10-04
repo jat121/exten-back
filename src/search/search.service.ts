@@ -11,7 +11,7 @@ export class SearchService implements OnModuleInit {
     currentProviders: string[] = [];
     curData: any[] = [];
     Buffer;
-    limit: number = 5;
+    limit: number = 3;
     onModuleInit() {
         TorrentSearchApi.enablePublicProviders();
         TorrentSearchApi.disableProvider("TorrentProject")
@@ -24,7 +24,7 @@ export class SearchService implements OnModuleInit {
 
     search = async (query: string, page: number) => {
         const start = (page === 1 || page === undefined) ? 0 : page * this.limit;
-        const limit = start + 5;
+        const limit = start + 3;
         let finalSearchResults:  any[] = [];
         const searchPromises: Promise<any[]>[] = this.currentProviders.map(async (name: string) => {
             try {
