@@ -22,12 +22,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/platform-express": "^8.0.0",
     "@types/torrent-search-api": "^2.0.0",
     "@types/uuid": "^8.3.4",
     "@types/webtorrent": "^0.109.3",
+    "dotenv": "^16.0.3",
     "mongoose": "^6.6.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -59,7 +61,6 @@
     "tsconfig-paths": "4.0.0",
     "typescript": "^4.3.5"
   },
-  
   "engines": {
     "node": "16.17.1"
   },

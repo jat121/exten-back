@@ -3,6 +3,7 @@ import * as TorrentSearchApi from "torrent-search-api";
 import { v4 as generateId } from 'uuid';
 import * as WebTorrent from 'webtorrent';
 import { threadId } from 'worker_threads';
+import dotenv from "dotenv"
 
 
 @Injectable()
@@ -14,6 +15,7 @@ export class SearchService implements OnModuleInit {
     limit: number = 3;
     onModuleInit() {
         TorrentSearchApi.enablePublicProviders();
+        TorrentSearchApi.enableProvider("Yggtorrent", [process.env.USERNAME, process.env.PASSWORD]);
         TorrentSearchApi.disableProvider("TorrentProject")
         this.currentProviders = TorrentSearchApi.getActiveProviders().map((provider: any) => {
             return provider.name;
@@ -25,7 +27,7 @@ export class SearchService implements OnModuleInit {
     search = async (query: string, page: number) => {
         const start = (page === 1 || page === undefined) ? 0 : page * this.limit;
         const limit = start + 3;
-        let finalSearchResults:  any[] = [];
+        let finalSearchResults: any[] = [];
         const searchPromises: Promise<any[]>[] = this.currentProviders.map(async (name: string) => {
             try {
                 return await TorrentSearchApi.search([name], query, 'All', limit * 50);
@@ -35,17 +37,18 @@ export class SearchService implements OnModuleInit {
         })
 
         const searchResults = (await Promise.all(searchPromises))
-            .filter((torrent:any[]) => {
+            .filter((torrent: any[]) => {
                 return torrent.length > 0;
             })
             .forEach((torrent: any[]) => {
+                console.log(torrent);
                 finalSearchResults = [...finalSearchResults, ...torrent];
             })
 
-        finalSearchResults = finalSearchResults.map((torrent:any) => {
+        finalSearchResults = finalSearchResults.map((torrent: any) => {
             torrent = { id: generateId(), ...torrent }
             return torrent;
-        }).filter((torrent:any) => {
+        }).filter((torrent: any) => {
             let title = torrent.title.toLowerCase();
             let q = query.toLowerCase();
             return this.find(title, q);
